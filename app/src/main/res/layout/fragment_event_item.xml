@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.EventItemFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/description"
+        android:id="@+id/eventName"
+        android:textSize="24sp"
+        tools:text = "Банкет"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventName"
+        app:layout_constraintBottom_toTopOf="@+id/cityEventItem"
+        android:id="@+id/description"
+        android:textSize="16sp"
+        tools:text = "Описание банкета, план мероприятия."/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintBottom_toTopOf="@+id/addressItem"
+        android:id="@+id/cityEventItem"
+        tools:text = "Ростов-на-Дону"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityEventItem"
+        app:layout_constraintBottom_toTopOf="@+id/dateEvent"
+        android:id="@+id/addressItem"
+        tools:text = "ул. Суворова, 23"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addressItem"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text = "24.11.2023 14:00"
+        android:id="@+id/dateEvent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

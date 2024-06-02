@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    android:textAlignment="center"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/light_yellow"
+        android:gravity="center_vertical"
+        android:padding="11dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemName"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            tools:text = "банкет"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cityEvent"
+            android:textSize="11sp"
+            tools:text = "Ростов-на-Дону" />
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/address"
+            android:textSize="11sp"
+            tools:text = "ул. Суворова, 25" />
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eventDate"
+            android:textSize="11sp"
+            tools:text = "01.06.2024"/>
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_block_24"
+            android:adjustViewBounds="true"
+            android:id="@+id/imageEvent"
+            />
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

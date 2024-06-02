@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EventPlanner</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_new_event_item">Add new event item</string>
+    <string name="visit">event is visited\n</string>
+</resources>
