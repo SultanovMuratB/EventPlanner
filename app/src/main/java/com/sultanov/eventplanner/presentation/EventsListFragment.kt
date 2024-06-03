@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.sultanov.eventplanner.R
@@ -54,6 +55,9 @@ class EventsListFragment : Fragment() {
         }
         eventListAdapter.onEventIconClickListener = {
             viewModel.changeEventState(it)
+        }
+        eventListAdapter.onEventItemClickListener = {
+            findNavController().navigate(R.id.action_eventsListFragment_to_eventItemFragment)
         }
         setupSwipeListener(rvEventList)
     }

@@ -14,6 +14,7 @@ import com.sultanov.eventplanner.domain.entity.EventItem
 class EventListAdapter : ListAdapter<EventItem, EventListAdapter.EventItemViewHolder>(EventItemDiffCallback()) {
 
     var onEventIconClickListener: ((EventItem) -> Unit)? = null
+    var onEventItemClickListener: ((EventItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventItemViewHolder {
         val layout = when (viewType) {
@@ -41,6 +42,9 @@ class EventListAdapter : ListAdapter<EventItem, EventListAdapter.EventItemViewHo
 
     override fun onBindViewHolder(holder: EventItemViewHolder, position: Int) {
         val eventItem = getItem(position)
+        holder.itemView.setOnClickListener {
+            onEventItemClickListener?.invoke(eventItem)
+        }
         holder.itemName.text = eventItem.name
         holder.address.text = eventItem.address
         holder.cityEvent.text = eventItem.cityEvent

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/eventsListFragment">
+
+    <fragment
+        android:id="@+id/eventsListFragment"
+        android:name="com.sultanov.eventplanner.presentation.EventsListFragment"
+        android:label="fragment_events_list"
+        tools:layout="@layout/fragment_events_list" >
+        <action
+            android:id="@+id/action_eventsListFragment_to_eventItemFragment"
+            app:destination="@id/eventItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventItemFragment"
+        android:name="com.sultanov.eventplanner.presentation.EventItemFragment"
+        android:label="fragment_event_item"
+        tools:layout="@layout/fragment_event_item" />
+</navigation>
