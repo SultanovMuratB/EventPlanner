@@ -23,7 +23,7 @@ object EventsRepositoryImpl : EventsRepository {
                 name = "name $i",
                 descriptionEvent = "description event $i",
                 address = "address $i",
-                cityEvent = "city event $i",
+                cityEvent = "Ростов-на-Дону",
                 event = array[(0..2).random()]
             )
             addEventItem(item)

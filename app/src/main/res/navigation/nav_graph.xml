@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/eventsListFragment"
-        android:name="com.sultanov.eventplanner.presentation.EventsListFragment"
+        android:name="com.sultanov.eventplanner.presentation.eventListScreen.EventsListFragment"
         android:label="fragment_events_list"
         tools:layout="@layout/fragment_events_list" >
         <action
@@ -16,7 +16,11 @@
     </fragment>
     <fragment
         android:id="@+id/eventItemFragment"
-        android:name="com.sultanov.eventplanner.presentation.EventItemFragment"
+        android:name="com.sultanov.eventplanner.presentation.eventItemScreen.EventItemFragment"
         android:label="fragment_event_item"
-        tools:layout="@layout/fragment_event_item" />
+        tools:layout="@layout/fragment_event_item" >
+        <argument
+            android:name="mode"
+            app:argType="com.sultanov.eventplanner.presentation.Mode" />
+    </fragment>
 </navigation>

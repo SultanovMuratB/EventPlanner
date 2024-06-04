@@ -1,4 +1,4 @@
-package com.sultanov.eventplanner.presentation
+package com.sultanov.eventplanner.presentation.eventListScreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

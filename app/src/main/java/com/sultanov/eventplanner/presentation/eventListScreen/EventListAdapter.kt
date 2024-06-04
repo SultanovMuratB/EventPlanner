@@ -1,4 +1,4 @@
-package com.sultanov.eventplanner.presentation
+package com.sultanov.eventplanner.presentation.eventListScreen
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,9 @@ import com.sultanov.eventplanner.R
 import com.sultanov.eventplanner.domain.entity.Event
 import com.sultanov.eventplanner.domain.entity.EventItem
 
-class EventListAdapter : ListAdapter<EventItem, EventListAdapter.EventItemViewHolder>(EventItemDiffCallback()) {
+class EventListAdapter : ListAdapter<EventItem, EventListAdapter.EventItemViewHolder>(
+    EventItemDiffCallback()
+) {
 
     var onEventIconClickListener: ((EventItem) -> Unit)? = null
     var onEventItemClickListener: ((EventItem) -> Unit)? = null

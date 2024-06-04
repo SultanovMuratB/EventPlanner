@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.EventItemFragment">
+    tools:context=".presentation.eventItemScreen.EventItemFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_name"
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_event_description"
-            android:inputType="number" />
+            android:inputType="textCapWords" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -111,8 +111,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_event_address"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/save_button"
+        app:layout_constraintBottom_toTopOf="@+id/event_group"
         />
+
+    <RadioGroup
+        android:id="@+id/event_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_event"
+        app:layout_constraintBottom_toTopOf="@+id/save_button">
+        <RadioButton
+            android:id="@+id/event_visited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/event_visited"/>
+        <RadioButton
+            android:id="@+id/event_miss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/event_miss"/>
+        <RadioButton
+            android:id="@+id/event_await"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/event_await"/>
+    </RadioGroup>
+
+
+
 
     <Button
         android:id="@+id/save_button"
@@ -122,4 +151,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

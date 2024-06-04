@@ -9,4 +9,7 @@
     <string name="enter_event_city">Введите город проведения мероприятия</string>
     <string name="save_button">Сохранить</string>
     <string name="enter_event_address">Введите адрес мероприятия</string>
+    <string name="event_visited">Мероприятие посещено</string>
+    <string name="event_miss">Мероприятие пропущено</string>
+    <string name="event_await">Мероприятие ожидается</string>
 </resources>

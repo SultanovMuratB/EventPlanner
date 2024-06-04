@@ -1,4 +1,4 @@
-package com.sultanov.eventplanner.presentation
+package com.sultanov.eventplanner.presentation.eventListScreen
 
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sultanov.eventplanner.R
+import com.sultanov.eventplanner.presentation.Mode
 
 class EventsListFragment : Fragment() {
 
     private lateinit var viewModel: EventLIstViewModel
     private lateinit var eventListAdapter: EventListAdapter
+    private lateinit var floatingActionButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +35,12 @@ class EventsListFragment : Fragment() {
         viewModel.shopList.observe(viewLifecycleOwner) {
             eventListAdapter.submitList(it)
             Log.d("EventFragment", it.toString())
+        }
+        floatingActionButton = view.findViewById(R.id.addEventItem)
+        floatingActionButton.setOnClickListener {
+            findNavController().navigate(
+                EventsListFragmentDirections.actionEventsListFragmentToEventItemFragment(Mode.Add)
+            )
         }
     }
 
@@ -57,7 +66,10 @@ class EventsListFragment : Fragment() {
             viewModel.changeEventState(it)
         }
         eventListAdapter.onEventItemClickListener = {
-            findNavController().navigate(R.id.action_eventsListFragment_to_eventItemFragment)
+            findNavController().navigate(
+                EventsListFragmentDirections
+                    .actionEventsListFragmentToEventItemFragment(Mode.Edit(it.id))
+            )
         }
         setupSwipeListener(rvEventList)
     }

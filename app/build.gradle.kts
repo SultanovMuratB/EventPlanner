@@ -42,6 +42,8 @@ dependencies {
 //    implementation(libs.room.core)
 //    implementation(libs.room.compiler)
 
+    implementation(libs.picasso)
+
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.gsonConverter)
 

@@ -1,4 +1,4 @@
-package com.sultanov.eventplanner.presentation
+package com.sultanov.eventplanner.presentation.weatherCityScreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

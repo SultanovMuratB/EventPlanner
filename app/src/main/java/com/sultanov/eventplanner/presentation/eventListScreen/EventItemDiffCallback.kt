@@ -1,4 +1,4 @@
-package com.sultanov.eventplanner.presentation
+package com.sultanov.eventplanner.presentation.eventListScreen
 
 import androidx.recyclerview.widget.DiffUtil
 import com.sultanov.eventplanner.domain.entity.EventItem
