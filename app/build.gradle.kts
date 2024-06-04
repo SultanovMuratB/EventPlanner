@@ -42,6 +42,9 @@ dependencies {
 //    implementation(libs.room.core)
 //    implementation(libs.room.compiler)
 
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.gsonConverter)
+
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
 //    implementation(libs.navigation.args)

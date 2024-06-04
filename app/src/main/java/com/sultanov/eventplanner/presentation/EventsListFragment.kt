@@ -14,7 +14,7 @@ import com.sultanov.eventplanner.R
 
 class EventsListFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: EventLIstViewModel
     private lateinit var eventListAdapter: EventListAdapter
 
     override fun onCreateView(
@@ -28,7 +28,7 @@ class EventsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this)[EventLIstViewModel::class.java]
         viewModel.shopList.observe(viewLifecycleOwner) {
             eventListAdapter.submitList(it)
             Log.d("EventFragment", it.toString())
