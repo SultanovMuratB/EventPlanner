@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sultanov.eventplanner.domain.entity.Event
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
+import java.util.Calendar
 
 object EventsRepositoryImpl : EventsRepository {
 
@@ -16,6 +17,7 @@ object EventsRepositoryImpl : EventsRepository {
 
     private val array = arrayOf(Event.MISS, Event.AWAIT, Event.VISITED)
 
+
     init {
         for (i in 0 until 1000) {
             val item = EventItem(
@@ -24,7 +26,7 @@ object EventsRepositoryImpl : EventsRepository {
                 descriptionEvent = "description event $i",
                 address = "address $i",
                 cityEvent = "Ростов-на-Дону",
-                event = array[(0..2).random()]
+                event = array[(0..2).random()],
             )
             addEventItem(item)
         }

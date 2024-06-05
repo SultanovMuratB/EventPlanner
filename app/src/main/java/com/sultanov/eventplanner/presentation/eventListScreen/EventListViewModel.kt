@@ -14,7 +14,7 @@ import com.sultanov.eventplanner.domain.usecase.EditEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.GetEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.GetEventsListUseCase
 
-class EventLIstViewModel : ViewModel() {
+class EventListViewModel : ViewModel() {
 
     private val repository = EventsRepositoryImpl
 
@@ -44,11 +44,11 @@ class EventLIstViewModel : ViewModel() {
             }
         }
         val newItem = eventItem.copy(event = event)
-        editEventItemUseCase.invoke(newItem)
+        editEventItemUseCase(newItem)
     }
 
     fun deleteEventItem(eventItem: EventItem) {
-        deleteEventItemUseCase.invoke(eventItem)
+        deleteEventItemUseCase(eventItem)
     }
 
     suspend fun loadCurrentWeather(query: String) : WeatherCityItem {

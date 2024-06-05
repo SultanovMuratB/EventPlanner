@@ -12,7 +12,7 @@ data class EventItem(
     val address: String,
     val cityEvent: String,
     val event: Event,
-    val date: Calendar,
+    val date: Calendar = Calendar.getInstance().apply { set(2022, Calendar.FEBRUARY, 4) }
 ) : Parcelable {
 
     companion object {

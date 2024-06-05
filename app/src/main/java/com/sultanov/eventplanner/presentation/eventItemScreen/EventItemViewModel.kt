@@ -30,7 +30,11 @@ class EventItemViewModel(
     private val _getEventItem = MutableLiveData<EventItem>()
     val getEventItem: LiveData<EventItem> = _getEventItem
 
-    fun getEventItem(eventItemId: Int) {
+    init {
+        getEventItemId(eventItemId)
+    }
+
+    private fun getEventItemId(eventItemId: Int) {
         _getEventItem.value = getEventItemUseCase(eventItemId)
     }
 

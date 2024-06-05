@@ -49,7 +49,7 @@ dependencies {
 
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-//    implementation(libs.navigation.args)
+    implementation(libs.navigation.args)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
