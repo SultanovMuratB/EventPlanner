@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sultanov.eventplanner.domain.entity.Event
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
+import java.util.Calendar
 
 object EventsRepositoryImpl : EventsRepository {
 
@@ -24,7 +25,10 @@ object EventsRepositoryImpl : EventsRepository {
                 descriptionEvent = "description event $i",
                 address = "address $i",
                 cityEvent = "Ростов-на-Дону",
-                event = array[(0..2).random()]
+                event = array[(0..2).random()],
+                date = Calendar.getInstance().apply {
+                    set(2020, 12, 5)
+                }
             )
             addEventItem(item)
         }

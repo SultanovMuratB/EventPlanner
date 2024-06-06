@@ -21,9 +21,6 @@ class EventItemViewModel(
     private val editEventItemUseCase = EditEventItemUseCase(repository)
     private val getEventItemUseCase = GetEventItemUseCase(repository)
 
-    private val _errorInputName = MutableLiveData<Boolean>()
-    val errorInputName: LiveData<Boolean> = _errorInputName
-
     private val _shouldCloseScreen = MutableLiveData<Unit>()
     val shouldCloseScreen: LiveData<Unit> = _shouldCloseScreen
 

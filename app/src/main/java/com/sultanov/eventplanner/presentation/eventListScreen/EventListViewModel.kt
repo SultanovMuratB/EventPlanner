@@ -1,6 +1,7 @@
 package com.sultanov.eventplanner.presentation.eventListScreen
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sultanov.eventplanner.data.mapper.toItem
 import com.sultanov.eventplanner.data.network.api.ApiFactory
@@ -13,8 +14,9 @@ import com.sultanov.eventplanner.domain.usecase.DeleteEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.EditEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.GetEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.GetEventsListUseCase
+import com.sultanov.eventplanner.presentation.Mode
 
-class EventLIstViewModel : ViewModel() {
+class EventListViewModel : ViewModel() {
 
     private val repository = EventsRepositoryImpl
 
@@ -27,6 +29,22 @@ class EventLIstViewModel : ViewModel() {
 
     private val _shopList = getEventsListUseCase.invoke()
     val shopList: LiveData<List<EventItem>> = _shopList
+
+    private val _eventItemLD = MutableLiveData<EventItem>()
+    val eventItemLD: LiveData<EventItem> = _eventItemLD
+
+    fun getEventMode(mode: Mode) {
+        when (mode) {
+            Mode.Add -> TODO()
+            is Mode.Edit -> {
+                val item = mode.eventId
+                _eventItemLD.value = getEventItemUseCase(item)
+            }
+        }
+    }
+
+
+
 
     fun changeEventState(eventItem: EventItem) {
         var event = eventItem.event

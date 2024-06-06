@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.navigation.args)
+    id ("androidx.navigation.safeargs")
     alias(libs.plugins.parcelize)
 }
 
@@ -48,8 +48,8 @@ dependencies {
     implementation(libs.retrofit.gsonConverter)
 
     implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
-//    implementation(libs.navigation.args)
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+//    implementation(libs.androidx.navigation.safe.args.gradle.plugin)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

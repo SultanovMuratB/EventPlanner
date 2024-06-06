@@ -16,7 +16,7 @@ import com.sultanov.eventplanner.presentation.Mode
 
 class EventsListFragment : Fragment() {
 
-    private lateinit var viewModel: EventLIstViewModel
+    private lateinit var viewModel: EventListViewModel
     private lateinit var eventListAdapter: EventListAdapter
     private lateinit var floatingActionButton: FloatingActionButton
 
@@ -31,7 +31,7 @@ class EventsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
-        viewModel = ViewModelProvider(this)[EventLIstViewModel::class.java]
+        viewModel = ViewModelProvider(this)[EventListViewModel::class.java]
         viewModel.shopList.observe(viewLifecycleOwner) {
             eventListAdapter.submitList(it)
             Log.d("EventFragment", it.toString())
