@@ -13,10 +13,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.squareup.picasso.Picasso
 import com.sultanov.eventplanner.R
+import com.sultanov.eventplanner.data.mapper.toItem
+import com.sultanov.eventplanner.data.network.api.ApiService
 import com.sultanov.eventplanner.domain.entity.Event
+import com.sultanov.eventplanner.domain.entity.WeatherCityItem
 import com.sultanov.eventplanner.presentation.eventListScreen.EventListViewModel
 import com.sultanov.eventplanner.presentation.eventListScreen.EventsListFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class EventItemFragment : Fragment() {
@@ -36,10 +43,18 @@ class EventItemFragment : Fragment() {
     private lateinit var missButton: RadioButton
     private lateinit var visitedButton: RadioButton
 
+    private lateinit var weatherCityItem: WeatherCityItem
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[EventListViewModel::class.java]
         viewModel.getEventMode(args.mode)
+        val city = viewModel.eventItemLD.value?.cityEvent ?: "Moscow"
+        val scope = CoroutineScope(Dispatchers.IO)
+        scope.launch {
+            weatherCityItem = apiService.loadCurrentWeather(city).toItem()
+        }
+
     }
 
     override fun onCreateView(
@@ -57,6 +72,11 @@ class EventItemFragment : Fragment() {
             etName.setText(it.name)
             etDescription.setText(it.descriptionEvent)
             etCityEvent.setText(it.cityEvent)
+            val icon = weatherCityItem.weather
+            Picasso.get()
+                .load(icon)
+                .error(R.drawable.baseline_cloudy_snowing_24)
+                .into(weatherIcon)
             etEventAddress.setText(it.address)
             val day = it.date.get(Calendar.DAY_OF_WEEK)
             val month = it.date.get(Calendar.MONTH + 1)

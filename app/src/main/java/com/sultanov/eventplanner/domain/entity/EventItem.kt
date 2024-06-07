@@ -13,6 +13,7 @@ data class EventItem(
     val cityEvent: String,
     val event: Event,
     val date: Calendar,
+    val icon: String = "https://openweathermap.org/img/wn/10d@2x.png"
 ) : Parcelable {
 
     companion object {
