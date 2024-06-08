@@ -8,7 +8,7 @@ import java.util.Date
 fun CurrentWeatherDto.toItem() : WeatherCityItem {
     return WeatherCityItem(
         name = name,
-        main = main.temp,
+        temp = main.temp,
         dt = dt.toCalendar(),
         weather = weather.first().icon.toCorrectImageUrl()
     )

@@ -66,5 +66,4 @@ object EventsRepositoryImpl : EventsRepository {
     private fun updateList() {
         eventListLD.value = eventList.toList()
     }
-
 }

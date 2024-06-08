@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
 //    alias(libs.plugins.androidx.navigation.safe.args.gradle.plugin) apply false
     alias(libs.plugins.parcelize) apply false
+    alias(libs.plugins.ksp) apply false
 }
 
 buildscript {

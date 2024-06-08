@@ -1,7 +1,6 @@
 package com.sultanov.eventplanner.presentation.eventListScreen
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,44 +9,49 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.sultanov.eventplanner.R
+import com.sultanov.eventplanner.databinding.FragmentEventsListBinding
 import com.sultanov.eventplanner.presentation.Mode
 
 class EventsListFragment : Fragment() {
 
     private lateinit var viewModel: EventListViewModel
     private lateinit var eventListAdapter: EventListAdapter
-    private lateinit var floatingActionButton: FloatingActionButton
+
+    private var _binding: FragmentEventsListBinding? = null
+    private val binding: FragmentEventsListBinding
+        get() = _binding ?: throw RuntimeException("FragmentEventsListBinding == null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_events_list, container, false)
+    ): View {
+        _binding = FragmentEventsListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView(view)
+        setupRecyclerView()
         viewModel = ViewModelProvider(this)[EventListViewModel::class.java]
         viewModel.shopList.observe(viewLifecycleOwner) {
             eventListAdapter.submitList(it)
-            Log.d("EventFragment", it.toString())
         }
-        floatingActionButton = view.findViewById(R.id.addEventItem)
-        floatingActionButton.setOnClickListener {
+        binding.addEventItem.setOnClickListener {
             findNavController().navigate(
                 EventsListFragmentDirections.actionEventsListFragmentToEventItemFragment(Mode.Add)
             )
         }
     }
 
-    private fun setupRecyclerView(view: View) {
-        val rvEventList = view.findViewById<RecyclerView>(R.id.rv_event_list)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupRecyclerView() {
         eventListAdapter = EventListAdapter()
-        with(rvEventList) {
+        with(binding.rvEventList) {
             adapter = eventListAdapter
             recycledViewPool.setMaxRecycledViews(
                 EventListAdapter.VIEW_TYPE_MISS,
@@ -71,7 +75,7 @@ class EventsListFragment : Fragment() {
                     .actionEventsListFragmentToEventItemFragment(Mode.Edit(it.id))
             )
         }
-        setupSwipeListener(rvEventList)
+        setupSwipeListener(binding.rvEventList)
     }
 
     private fun setupSwipeListener(rvEventList: RecyclerView) {

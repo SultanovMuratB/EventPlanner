@@ -12,4 +12,5 @@
     <string name="event_visited">Мероприятие посещено</string>
     <string name="event_miss">Мероприятие пропущено</string>
     <string name="event_await">Мероприятие ожидается</string>
+    <string name="temp_today">Температура на сегодня</string>
 </resources>

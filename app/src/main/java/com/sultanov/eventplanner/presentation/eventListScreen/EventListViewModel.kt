@@ -9,7 +9,6 @@ import com.sultanov.eventplanner.data.repository.EventsRepositoryImpl
 import com.sultanov.eventplanner.domain.entity.Event
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.entity.WeatherCityItem
-import com.sultanov.eventplanner.domain.usecase.AddEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.DeleteEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.EditEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.GetEventItemUseCase
@@ -20,7 +19,6 @@ class EventListViewModel : ViewModel() {
 
     private val repository = EventsRepositoryImpl
 
-    private val addEventItemUseCase = AddEventItemUseCase(repository)
     private val deleteEventItemUseCase = DeleteEventItemUseCase(repository)
     private val editEventItemUseCase = EditEventItemUseCase(repository)
     private val getEventsListUseCase = GetEventsListUseCase(repository)
@@ -33,6 +31,10 @@ class EventListViewModel : ViewModel() {
     private val _eventItemLD = MutableLiveData<EventItem>()
     val eventItemLD: LiveData<EventItem> = _eventItemLD
 
+    suspend fun loadCurrentWeatherCity(city: String) : WeatherCityItem {
+        return client.loadCurrentWeather(city).toItem()
+    }
+
     fun getEventMode(mode: Mode) {
         when (mode) {
             Mode.Add -> TODO()
@@ -42,9 +44,6 @@ class EventListViewModel : ViewModel() {
             }
         }
     }
-
-
-
 
     fun changeEventState(eventItem: EventItem) {
         var event = eventItem.event
@@ -67,9 +66,5 @@ class EventListViewModel : ViewModel() {
 
     fun deleteEventItem(eventItem: EventItem) {
         deleteEventItemUseCase.invoke(eventItem)
-    }
-
-    suspend fun loadCurrentWeather(query: String) : WeatherCityItem {
-        return client.loadCurrentWeather(query).toItem()
     }
 }

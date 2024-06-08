@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id ("androidx.navigation.safeargs")
     alias(libs.plugins.parcelize)
+    alias(libs.plugins.ksp)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -35,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -43,6 +48,9 @@ dependencies {
 //    implementation(libs.room.compiler)
 
     implementation(libs.picasso)
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
+
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.gsonConverter)

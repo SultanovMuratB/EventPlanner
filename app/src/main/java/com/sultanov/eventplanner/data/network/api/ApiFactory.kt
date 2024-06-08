@@ -8,7 +8,7 @@ import retrofit2.create
 object ApiFactory {
 
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-    private const val KEY_PARAM = "key"
+    private const val KEY_PARAM = "appid"
     private const val KEY = "2642a7374e493896a3729c45238207cb"
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -23,7 +23,8 @@ object ApiFactory {
                 .url(newUrl)
                 .build()
             chain.proceed(newRequest)
-        }.build()
+        }
+        .build()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

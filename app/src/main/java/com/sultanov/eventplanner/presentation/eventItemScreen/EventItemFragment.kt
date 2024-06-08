@@ -1,28 +1,19 @@
 package com.sultanov.eventplanner.presentation.eventItemScreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.Picasso
-import com.sultanov.eventplanner.R
-import com.sultanov.eventplanner.data.mapper.toItem
-import com.sultanov.eventplanner.data.network.api.ApiService
+import com.sultanov.eventplanner.databinding.FragmentEventItemBinding
 import com.sultanov.eventplanner.domain.entity.Event
 import com.sultanov.eventplanner.domain.entity.WeatherCityItem
 import com.sultanov.eventplanner.presentation.eventListScreen.EventListViewModel
-import com.sultanov.eventplanner.presentation.eventListScreen.EventsListFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -31,76 +22,69 @@ class EventItemFragment : Fragment() {
     private val args by navArgs<EventItemFragmentArgs>()
     private lateinit var viewModel: EventListViewModel
 
-    private lateinit var tilName: TextInputLayout
-    private lateinit var etName: TextInputEditText
-    private lateinit var etDescription: TextInputEditText
-    private lateinit var etCityEvent: TextInputEditText
-    private lateinit var weatherIcon: ImageView
-    private lateinit var etEventAddress: TextInputEditText
-    private lateinit var date: DatePicker
-    private lateinit var radioGroup: RadioGroup
-    private lateinit var awaitButton: RadioButton
-    private lateinit var missButton: RadioButton
-    private lateinit var visitedButton: RadioButton
-
-    private lateinit var weatherCityItem: WeatherCityItem
+    private var _binding: FragmentEventItemBinding? = null
+    private val binding: FragmentEventItemBinding
+        get() = _binding ?: throw RuntimeException("FragmentEventItemBinding == null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[EventListViewModel::class.java]
         viewModel.getEventMode(args.mode)
-        val city = viewModel.eventItemLD.value?.cityEvent ?: "Moscow"
-        val scope = CoroutineScope(Dispatchers.IO)
-        scope.launch {
-            weatherCityItem = apiService.loadCurrentWeather(city).toItem()
-        }
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        return inflater.inflate(R.layout.fragment_event_item, container, false)
+    ): View {
+        _binding = FragmentEventItemBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews(view)
         viewModel.eventItemLD.observe(viewLifecycleOwner) {
-            etName.setText(it.name)
-            etDescription.setText(it.descriptionEvent)
-            etCityEvent.setText(it.cityEvent)
-            val icon = weatherCityItem.weather
+            with(binding) {
+                etName.setText(it.name)
+                etDescription.setText(it.descriptionEvent)
+                etCityEvent.setText(it.cityEvent)
+                etEventAddress.setText(it.address)
+                val day = it.date.get(Calendar.DAY_OF_WEEK)
+                val month = it.date.get(Calendar.MONTH + 1)
+                val year = it.date.get(Calendar.YEAR)
+                dateEvent.init(year, month, day, null)
+                when (it.event) {
+                    Event.VISITED -> eventVisited.isEnabled
+                    Event.MISS -> eventMiss.isEnabled
+                    Event.AWAIT -> eventAwait.isEnabled
+                }
+            }
+        }
+        viewModel.viewModelScope.launch {
+            val weatherCityItem = viewModel.eventItemLD.value?.let { getWeatherIcon(it.cityEvent) }
+            val icon = weatherCityItem?.weather
             Picasso.get()
                 .load(icon)
-                .error(R.drawable.baseline_cloudy_snowing_24)
-                .into(weatherIcon)
-            etEventAddress.setText(it.address)
-            val day = it.date.get(Calendar.DAY_OF_WEEK)
-            val month = it.date.get(Calendar.MONTH + 1)
-            val year = it.date.get(Calendar.YEAR)
-            date.init(year, month, day, null)
-            when (it.event) {
-                Event.VISITED -> visitedButton.isEnabled
-                Event.MISS -> missButton.isEnabled
-                Event.AWAIT -> awaitButton.isEnabled
+                .resize(30, 30)
+                .into(binding.weatherIcon)
+            if (weatherCityItem != null) {
+                binding.weatherIcon.setOnClickListener {
+                    findNavController()
+                        .navigate(
+                            EventItemFragmentDirections
+                                .actionEventItemFragmentToWeatherCityFragment(weatherCityItem)
+                        )
+                }
             }
         }
     }
 
-    private fun initViews(view: View) {
-        tilName = view.findViewById(R.id.til_name)
-        etName = view.findViewById(R.id.et_name)
-        etDescription = view.findViewById(R.id.et_description)
-        etCityEvent = view.findViewById(R.id.et_city_event)
-        weatherIcon = view.findViewById(R.id.weather_icon)
-        etEventAddress = view.findViewById(R.id.et_event_address)
-        date = view.findViewById(R.id.date_event)
-        radioGroup = view.findViewById(R.id.event_group)
-        awaitButton = view.findViewById(R.id.event_await)
-        missButton = view.findViewById(R.id.event_miss)
-        visitedButton = view.findViewById(R.id.event_visited)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private suspend fun getWeatherIcon(city: String): WeatherCityItem {
+        val weatherCityItem = viewModel.loadCurrentWeatherCity(city)
+        return weatherCityItem
     }
 }
