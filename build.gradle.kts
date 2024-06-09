@@ -5,6 +5,7 @@ plugins {
 //    alias(libs.plugins.androidx.navigation.safe.args.gradle.plugin) apply false
     alias(libs.plugins.parcelize) apply false
     alias(libs.plugins.ksp) apply false
+
 }
 
 buildscript {

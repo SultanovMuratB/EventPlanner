@@ -1,155 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.eventItemScreen.EventItemFragment">
+<layout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/til_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
+    <data>
+        <variable
+            name="eventItem"
+            type="com.sultanov.eventplanner.domain.entity.EventItem" />
+    </data>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_event_name"
-            android:inputType="textCapWords" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_city_event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_event_description"
-            android:inputType="textCapWords" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_city_event"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_event_address"
-        app:layout_constraintEnd_toStartOf="@+id/weather_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_description">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_city_event"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_event_city"
-            android:inputType="textCapWords" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:id="@+id/weather_icon"
-        app:layout_constraintTop_toBottomOf="@+id/til_description"
-        app:layout_constraintStart_toEndOf="@+id/til_city_event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/til_event_address"
-        android:src="@drawable/baseline_cloudy_snowing_24"
-
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_event_address"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/date_event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_city_event">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_event_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_event_address"
-            android:inputType="textCapWords" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <DatePicker
-        android:id="@+id/date_event"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"
-        android:minDate="01.01.2024"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_event_address"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/event_group"
-        />
-
-    <RadioGroup
-        android:id="@+id/event_group"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_event"
-        app:layout_constraintBottom_toTopOf="@+id/save_button">
-        <RadioButton
-            android:id="@+id/event_visited"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        tools:context=".presentation.eventItemScreen.EventItemFragment">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/event_visited"/>
-        <RadioButton
-            android:id="@+id/event_miss"
-            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@id/til_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_event_name"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_description"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/event_miss"/>
-        <RadioButton
-            android:id="@+id/event_await"
-            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/til_city_event"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_event_description"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_city_event"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/event_await"/>
-    </RadioGroup>
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/til_event_address"
+            app:layout_constraintEnd_toStartOf="@+id/weather_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_city_event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_event_city"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/weather_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/baseline_cloudy_snowing_24"
+            app:layout_constraintBottom_toTopOf="@+id/til_event_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/til_city_event"
+            app:layout_constraintTop_toBottomOf="@+id/til_description"
+
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_event_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/date_event"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_city_event">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_event_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_event_address"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <DatePicker
+            android:id="@+id/date_event"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:minDate="01.01.2024"
+            app:layout_constraintBottom_toTopOf="@+id/event_group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_event_address" />
+
+        <RadioGroup
+            android:id="@+id/event_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/save_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_event">
+
+            <RadioButton
+                android:id="@+id/event_visited"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_visited" />
+
+            <RadioButton
+                android:id="@+id/event_miss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_miss" />
+
+            <RadioButton
+                android:id="@+id/event_await"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/event_await" />
+        </RadioGroup>
 
 
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/save_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

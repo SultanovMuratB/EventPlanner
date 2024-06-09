@@ -1,25 +1,45 @@
 package com.sultanov.eventplanner.presentation.eventListScreen
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.sultanov.eventplanner.EventApp
 import com.sultanov.eventplanner.databinding.FragmentEventsListBinding
 import com.sultanov.eventplanner.presentation.Mode
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class EventsListFragment : Fragment() {
 
     private lateinit var viewModel: EventListViewModel
     private lateinit var eventListAdapter: EventListAdapter
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private var _binding: FragmentEventsListBinding? = null
     private val binding: FragmentEventsListBinding
         get() = _binding ?: throw RuntimeException("FragmentEventsListBinding == null")
+
+    private val component by lazy {
+        (requireActivity().application as EventApp).component
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        component.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,9 +53,11 @@ class EventsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel = ViewModelProvider(this)[EventListViewModel::class.java]
-        viewModel.shopList.observe(viewLifecycleOwner) {
-            eventListAdapter.submitList(it)
+        viewModel = ViewModelProvider(this, viewModelFactory)[EventListViewModel::class.java]
+        lifecycleScope.launch {
+            viewModel.eventList.collect {
+                eventListAdapter.submitList(it)
+            }
         }
         binding.addEventItem.setOnClickListener {
             findNavController().navigate(
@@ -67,7 +89,9 @@ class EventsListFragment : Fragment() {
             )
         }
         eventListAdapter.onEventIconClickListener = {
-            viewModel.changeEventState(it)
+            viewModel.viewModelScope.launch {
+                viewModel.changeEventState(it)
+            }
         }
         eventListAdapter.onEventItemClickListener = {
             findNavController().navigate(
@@ -93,7 +117,10 @@ class EventsListFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = eventListAdapter.currentList[viewHolder.adapterPosition]
-                viewModel.deleteEventItem(item)
+
+                lifecycleScope.launch {
+                    viewModel.deleteEventItem(item)
+                }
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)

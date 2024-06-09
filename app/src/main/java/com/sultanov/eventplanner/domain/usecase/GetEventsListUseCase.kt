@@ -1,12 +1,13 @@
 package com.sultanov.eventplanner.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetEventsListUseCase(
+class GetEventsListUseCase @Inject constructor(
     private val repository: EventsRepository
 ) {
 
-    operator fun invoke() : LiveData<List<EventItem>> = repository.getEventsList()
+    operator fun invoke() : List<EventItem> = repository.getEventsList()
 }

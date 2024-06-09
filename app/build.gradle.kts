@@ -4,7 +4,8 @@ plugins {
     id ("androidx.navigation.safeargs")
     alias(libs.plugins.parcelize)
     alias(libs.plugins.ksp)
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -38,18 +39,21 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding = true
+        dataBinding = true
     }
 }
 
 dependencies {
-//
-//    implementation(libs.room.core)
-//    implementation(libs.room.compiler)
+
+    implementation(libs.room.core)
+    ksp(libs.room.compiler)
 
     implementation(libs.picasso)
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
+
+    implementation ("com.google.dagger:dagger:2.51.1")
+    ksp("com.google.dagger:dagger-compiler:2.51.1")
 
 
     implementation(libs.retrofit.core)

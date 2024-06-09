@@ -1,14 +1,17 @@
 package com.sultanov.eventplanner.data.local.model
-//
-//import androidx.room.ColumnInfo
-//import androidx.room.Entity
-//import androidx.room.PrimaryKey
-//
-//@Entity(tableName = "events_planner")
-//data class EventDbModel(
-//    @PrimaryKey(autoGenerate = true) val id: Int,
-//    @ColumnInfo(name = "name") val name: String,
-//    @ColumnInfo(name = "descriptionEvent") val descriptionEvent: String,
-//    @ColumnInfo(name = "address") val address: String,
-//    @ColumnInfo(name = "cityEvent") val cityEvent: String,
-//)
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.sultanov.eventplanner.domain.entity.Event
+import java.util.Date
+
+@Entity(tableName = "events_planner")
+data class EventDbModel(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val name: String,
+    val descriptionEvent: String,
+    val address: String,
+    val date: Long,
+    val cityEvent: String,
+    val event: Event
+)

@@ -2,10 +2,11 @@ package com.sultanov.eventplanner.domain.usecase
 
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
+import javax.inject.Inject
 
-class EditEventItemUseCase(
+class EditEventItemUseCase @Inject constructor(
     private val repository: EventsRepository
 ) {
 
-    operator fun invoke(eventItem: EventItem) = repository.editEventItem(eventItem)
+    suspend operator fun invoke(eventItem: EventItem) = repository.editEventItem(eventItem)
 }
