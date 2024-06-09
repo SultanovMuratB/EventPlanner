@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 interface EventsRepository {
 
-    fun getEventsList() : List<EventItem>
+    fun getEventsList() : Flow<List<EventItem>>
 
     suspend fun addEventItem(eventItem: EventItem)
 

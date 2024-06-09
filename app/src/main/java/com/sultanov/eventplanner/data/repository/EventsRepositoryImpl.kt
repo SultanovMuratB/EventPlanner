@@ -7,6 +7,7 @@ import com.sultanov.eventplanner.data.mapper.toListItem
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -14,8 +15,10 @@ class EventsRepositoryImpl @Inject constructor(
     private val eventsPlannerDao: EventsPlannerDao,
 ) : EventsRepository {
 
-    override fun getEventsList(): List<EventItem> {
-        return eventsPlannerDao.getEventsPlanner().toListItem()
+    override fun getEventsList(): Flow<List<EventItem>> = flow {
+        eventsPlannerDao.getEventsPlanner().map {
+            it.toListItem()
+        }
     }
 
     override suspend fun addEventItem(eventItem: EventItem) {

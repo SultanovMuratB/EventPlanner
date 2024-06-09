@@ -3,19 +3,19 @@ package com.sultanov.eventplanner.presentation.eventListScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.sultanov.eventplanner.domain.entity.Event
 import com.sultanov.eventplanner.domain.entity.EventItem
-import com.sultanov.eventplanner.domain.entity.WeatherCityItem
-import com.sultanov.eventplanner.domain.usecase.AddEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.DeleteEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.EditEventItemUseCase
-import com.sultanov.eventplanner.domain.usecase.GetEventItemUseCase
 import com.sultanov.eventplanner.domain.usecase.GetEventsListUseCase
-import com.sultanov.eventplanner.domain.usecase.LoadWeatherUseCase
-import com.sultanov.eventplanner.presentation.Mode
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EventListViewModel @Inject constructor(
@@ -24,16 +24,9 @@ class EventListViewModel @Inject constructor(
     private val getEventsListUseCase: GetEventsListUseCase,
 ) : ViewModel() {
 
-    private val _eventList = MutableStateFlow<List<EventItem>>(listOf())
-    val eventList = _eventList.asStateFlow()
-
-    init {
-        getEventList()
-    }
-
-    private fun getEventList() {
-        _eventList.value = getEventsListUseCase()
-    }
+    private val _eventList = MutableLiveData<List<EventItem>>()
+    val eventList: Flow<List<EventItem>> = getEventsListUseCase()
+        .onEach { _eventList.value = it }
 
     suspend fun changeEventState(eventItem: EventItem) {
         var event = eventItem.event

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface EventsPlannerDao {
 
     @Query("SELECT * FROM events_planner")
-    fun getEventsPlanner() : List<EventDbModel>
+    fun getEventsPlanner() : Flow<List<EventDbModel>>
 
     @Query("DELETE FROM events_planner WHERE id =:eventId")
     suspend fun deleteFromEvents(eventId: Int)

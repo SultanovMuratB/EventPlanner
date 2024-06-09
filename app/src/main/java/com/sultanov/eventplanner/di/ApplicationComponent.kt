@@ -16,7 +16,9 @@ import dagger.Component
 )
 interface ApplicationComponent {
 
-    fun inject(fragment: Fragment)
+    fun inject(fragment: EventsListFragment)
+
+    fun inject(fragment: EventItemFragment)
 
     @Component.Factory
     interface Factory {
