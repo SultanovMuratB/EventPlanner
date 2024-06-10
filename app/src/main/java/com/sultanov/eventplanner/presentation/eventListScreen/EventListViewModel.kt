@@ -25,7 +25,13 @@ class EventListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _eventList = MutableLiveData<List<EventItem>>()
-    val eventList: Flow<List<EventItem>> = getEventsListUseCase()
+    val eventList: LiveData<List<EventItem>> = _eventList
+
+    init {
+        loadDate()
+    }
+
+    private fun loadDate() = getEventsListUseCase()
         .onEach { _eventList.value = it }
 
     suspend fun changeEventState(eventItem: EventItem) {

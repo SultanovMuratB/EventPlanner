@@ -9,7 +9,6 @@ import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
@@ -71,8 +70,7 @@ class EventItemFragment : Fragment() {
     }
 
     private suspend fun launchMode() {
-        val mode = args.mode
-        when (mode) {
+        when (args.mode) {
             Mode.Add -> launchAddMode()
             is Mode.Edit -> launchEditMode()
         }
@@ -91,6 +89,7 @@ class EventItemFragment : Fragment() {
                         event = getEventState(),
                     )
                 )
+               findNavController().popBackStack()
             }
         }
     }
@@ -114,8 +113,7 @@ class EventItemFragment : Fragment() {
     }
 
     private fun getEventState(): Event {
-        val checkedRadioButton = binding.eventGroup.checkedRadioButtonId
-        return when (checkedRadioButton) {
+        return when (binding.eventGroup.checkedRadioButtonId) {
             binding.eventMiss.id -> Event.MISS
             binding.eventAwait.id -> Event.AWAIT
             binding.eventVisited.id -> Event.VISITED
@@ -148,7 +146,6 @@ class EventItemFragment : Fragment() {
     }
 
     private suspend fun getWeatherIcon(city: String): WeatherCityItem {
-        val weatherCityItem = viewModel.loadCurrentWeatherCity(city)
-        return weatherCityItem
+        return viewModel.loadCurrentWeatherCity(city)
     }
 }
