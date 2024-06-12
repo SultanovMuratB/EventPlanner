@@ -1,20 +1,18 @@
 package com.sultanov.eventplanner.di
 
 import android.app.Application
-import androidx.fragment.app.Fragment
-import com.sultanov.eventplanner.presentation.eventItemScreen.EventItemFragment
-import com.sultanov.eventplanner.presentation.eventListScreen.EventsListFragment
+import com.sultanov.eventplanner.presentation.event.item.EventItemFragment
+import com.sultanov.eventplanner.presentation.event.list.EventsListFragment
 import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
 @Component(
     modules = [
-        DataModule::class,
-        ViewModelModule::class
+        ApplicationModule::class,
     ],
 )
-interface ApplicationComponent {
+internal interface ApplicationComponent {
 
     fun inject(fragment: EventsListFragment)
 
@@ -28,3 +26,4 @@ interface ApplicationComponent {
         ): ApplicationComponent
     }
 }
+

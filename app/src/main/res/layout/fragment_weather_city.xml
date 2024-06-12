@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.weatherCityScreen.WeatherCityFragment">
+        tools:context=".presentation.event.weather.WeatherCityFragment">
 
         <TextView
             android:id="@+id/city_name"

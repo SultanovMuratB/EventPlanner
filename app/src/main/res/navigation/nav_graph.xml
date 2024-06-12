@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/eventsListFragment"
-        android:name="com.sultanov.eventplanner.presentation.eventListScreen.EventsListFragment"
+        android:name="com.sultanov.eventplanner.presentation.event.list.EventsListFragment"
         android:label="fragment_events_list"
         tools:layout="@layout/fragment_events_list" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/eventItemFragment"
-        android:name="com.sultanov.eventplanner.presentation.eventItemScreen.EventItemFragment"
+        android:name="com.sultanov.eventplanner.presentation.event.item.EventItemFragment"
         android:label="fragment_event_item"
         tools:layout="@layout/fragment_event_item" >
         <argument
@@ -28,11 +28,11 @@
     </fragment>
     <fragment
         android:id="@+id/weatherCityFragment"
-        android:name="com.sultanov.eventplanner.presentation.weatherCityScreen.WeatherCityFragment"
+        android:name="com.sultanov.eventplanner.presentation.event.weather.WeatherCityFragment"
         android:label="fragment_weather_city"
         tools:layout="@layout/fragment_weather_city" >
         <argument
             android:name="weatherCityItem"
-            app:argType="com.sultanov.eventplanner.domain.entity.WeatherCityItem" />
+            app:argType="com.sultanov.eventplanner.domain.weather.Weather" />
     </fragment>
 </navigation>
