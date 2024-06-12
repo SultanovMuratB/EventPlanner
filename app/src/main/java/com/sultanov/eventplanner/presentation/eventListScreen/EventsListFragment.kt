@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -50,11 +54,8 @@ class EventsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
         viewModel = ViewModelProvider(this, viewModelFactory)[EventListViewModel::class.java]
-        viewModel.eventList.observe(viewLifecycleOwner) {
-            eventListAdapter.submitList(it)
-        }
+        setupRecyclerView()
         binding.addEventItem.setOnClickListener {
             findNavController().navigate(
                 EventsListFragmentDirections.actionEventsListFragmentToEventItemFragment(Mode.Add)
@@ -83,6 +84,11 @@ class EventsListFragment : Fragment() {
                 EventListAdapter.VIEW_TYPE_VISIT,
                 EventListAdapter.MAX_POOL_SIZE
             )
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.eventList.observe(viewLifecycleOwner, Observer {
+                eventListAdapter.submitList(it)
+            })
         }
         eventListAdapter.onEventIconClickListener = {
             viewModel.viewModelScope.launch {

@@ -1,5 +1,6 @@
 package com.sultanov.eventplanner.domain.usecase
 
+import androidx.lifecycle.LiveData
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ class GetEventsListUseCase @Inject constructor(
     private val repository: EventsRepository
 ) {
 
-    operator fun invoke() : Flow<List<EventItem>> = flow {
-        repository.getEventsList()
+    operator fun invoke() : Flow<List<EventItem>> {
+        return repository.getEventsList()
     }
 }

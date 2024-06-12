@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.sultanov.eventplanner.data.local.model.EventDbModel
 import com.sultanov.eventplanner.domain.entity.EventItem
 import kotlinx.coroutines.flow.Flow
@@ -21,5 +22,8 @@ interface EventsPlannerDao {
     suspend fun addToEventsPlanner(eventDbModel: EventDbModel)
 
     @Query("SELECT * FROM events_planner WHERE id =:id LIMIT 1 ")
-    suspend fun getEventItem(id: Int) : EventItem
+    suspend fun getEventItem(id: Int) : EventDbModel
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun editToEventsPlanner(eventDbModel: EventDbModel)
 }

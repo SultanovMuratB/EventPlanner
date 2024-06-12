@@ -1,9 +1,7 @@
 package com.sultanov.eventplanner.domain.repository
 
-import androidx.lifecycle.LiveData
 import com.sultanov.eventplanner.domain.entity.EventItem
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 interface EventsRepository {
 

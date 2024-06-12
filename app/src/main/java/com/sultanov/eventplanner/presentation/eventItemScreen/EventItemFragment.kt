@@ -21,6 +21,7 @@ import com.sultanov.eventplanner.presentation.Mode
 import com.sultanov.eventplanner.presentation.eventListScreen.ViewModelFactory
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 class EventItemFragment : Fragment() {
@@ -96,6 +97,25 @@ class EventItemFragment : Fragment() {
 
     private suspend fun launchEditMode() {
         viewModel.getEventMode(args.mode)
+        viewModel.eventItemLD.observe(viewLifecycleOwner) {
+            with(binding) {
+                etName.setText(it.name)
+                etCityEvent.setText(it.cityEvent)
+                etDescription.setText(it.descriptionEvent)
+                etEventAddress.setText(it.address)
+                when (it.event) {
+                    Event.VISITED -> eventVisited.isEnabled
+                    Event.MISS -> eventMiss.isEnabled
+                    Event.AWAIT -> eventAwait.isEnabled
+                }
+                val date = it.date.toCalendar()
+                dateEvent.updateDate(
+                    date.get(Calendar.YEAR),
+                    date.get(Calendar.MONTH+1),
+                    date.get(Calendar.DAY_OF_WEEK),
+                )
+            }
+        }
         binding.saveButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.editEventItem(
@@ -108,6 +128,7 @@ class EventItemFragment : Fragment() {
                         event = getEventState(),
                     )
                 )
+                findNavController().popBackStack()
             }
         }
     }
@@ -143,6 +164,10 @@ class EventItemFragment : Fragment() {
         return Calendar.getInstance().apply {
             set(year, month + 1, dayOfMonth)
         }.timeInMillis
+    }
+
+    private fun Long.toCalendar() = Calendar.getInstance().apply {
+        time = Date(this@toCalendar * 1000)
     }
 
     private suspend fun getWeatherIcon(city: String): WeatherCityItem {

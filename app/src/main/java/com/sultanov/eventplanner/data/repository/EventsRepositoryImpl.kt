@@ -1,13 +1,12 @@
 package com.sultanov.eventplanner.data.repository
 
-import androidx.lifecycle.LiveData
 import com.sultanov.eventplanner.data.local.db.EventsPlannerDao
 import com.sultanov.eventplanner.data.mapper.toDbModel
+import com.sultanov.eventplanner.data.mapper.toItem
 import com.sultanov.eventplanner.data.mapper.toListItem
 import com.sultanov.eventplanner.domain.entity.EventItem
 import com.sultanov.eventplanner.domain.repository.EventsRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -15,8 +14,8 @@ class EventsRepositoryImpl @Inject constructor(
     private val eventsPlannerDao: EventsPlannerDao,
 ) : EventsRepository {
 
-    override fun getEventsList(): Flow<List<EventItem>> = flow {
-        eventsPlannerDao.getEventsPlanner().map {
+    override fun getEventsList(): Flow<List<EventItem>>  {
+        return eventsPlannerDao.getEventsPlanner().map {
             it.toListItem()
         }
     }
@@ -30,10 +29,10 @@ class EventsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun editEventItem(eventItem: EventItem) {
-        eventsPlannerDao.addToEventsPlanner(eventItem.toDbModel())
+        eventsPlannerDao.editToEventsPlanner(eventItem.toDbModel())
     }
 
     override suspend fun getEventItem(eventId: Int): EventItem {
-        return eventsPlannerDao.getEventItem(eventId)
+        return eventsPlannerDao.getEventItem(eventId).toItem()
     }
 }
