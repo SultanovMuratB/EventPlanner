@@ -17,11 +17,11 @@ internal interface EventsDao {
     suspend fun createEvent(event: EventEntity)
 
     @Query("SELECT * FROM events_planner WHERE id =:eventId LIMIT 1")
-    suspend fun readEvent(eventId: Int): EventEntity
+    suspend fun readEvent(eventId: Long): EventEntity
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateEvent(eventEntity: EventEntity)
 
     @Query("DELETE FROM events_planner WHERE id =:eventId")
-    suspend fun deleteEvent(eventId: Int)
+    suspend fun deleteEvent(eventId: Long)
 }

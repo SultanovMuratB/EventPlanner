@@ -8,24 +8,31 @@ import javax.inject.Inject
 
 internal class EventsRepositoryImpl @Inject constructor(
     private val eventsDao: EventsDao,
+    private val eventsMapper: EventsMapper,
 ) : EventsRepository {
 
     override fun getEvents(): Flow<List<Event>> {
-        return eventsDao.getEvents().map {
-            it.toListItem()
-        }
+        val flowEntity = eventsDao.getEvents()
+        val flowItem = flowEntity.map { eventsMapper.mapToList(it) }
+
+        return flowItem
     }
 
     override suspend fun addEvent(event: Event) {
-        eventsDao.createEvent(event.toDbModel())
+        val eventDb = eventsMapper.mapToEntity(event)
+        eventsDao.createEvent(eventDb)
     }
 
-    override suspend fun getEvent(eventId: Int): Event {
-        return eventsDao.readEvent(eventId).toItem()
+    override suspend fun getEvent(eventId: Long): Event {
+        val eventDb = eventsDao.readEvent(eventId)
+        val event = eventsMapper.mapToItem(eventDb)
+
+        return event
     }
 
     override suspend fun editEvent(event: Event) {
-        eventsDao.updateEvent(event.toDbModel())
+        val eventDb = eventsMapper.mapToEntity(event)
+        eventsDao.updateEvent(eventDb)
     }
 
     override suspend fun removeEvent(event: Event) {

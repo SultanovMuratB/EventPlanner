@@ -34,6 +34,9 @@ class WeatherCityFragment : Fragment() {
         with(binding) {
             cityName.text = weather.city
             currentTemp.text = weather.temperature.substringBefore(".")
+            tempMin.text = weather.minTemperature.substringBefore(".")
+            tempMax.text = weather.maxTemperature.substringBefore(".")
+            windSpeed.text = weather.speedWind.substringBefore(".")
         }
     }
 }

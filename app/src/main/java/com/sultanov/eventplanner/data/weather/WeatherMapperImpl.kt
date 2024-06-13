@@ -15,6 +15,9 @@ internal class WeatherMapperImpl @Inject constructor() : WeatherMapper {
                 city = weatherDto.city,
                 weatherIconUrl = weatherIconUrl,
                 temperature = weatherDto.temperatureHolder.temperature,
+                minTemperature = weatherDto.temperatureHolder.minTemperature,
+                maxTemperature = weatherDto.temperatureHolder.maxTemperature,
+                speedWind = weatherDto.wind.speed,
                 timestamp = weatherDto.timestamp,
             )
         }

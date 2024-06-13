@@ -9,6 +9,6 @@ sealed interface Mode : Parcelable {
     data object Add : Mode
 
     @Parcelize
-    data class Edit(val eventId: Int) : Mode
+    data class Edit(val eventId: Long) : Mode
 
 }

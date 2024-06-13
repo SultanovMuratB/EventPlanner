@@ -13,4 +13,6 @@
     <string name="event_miss">Мероприятие пропущено</string>
     <string name="event_await">Мероприятие ожидается</string>
     <string name="temp_today">Температура на сегодня</string>
+    <string name="min_max_temperature">Минимальная и максимальная температуры</string>
+    <string name="wind_speed">Скорость ветра</string>
 </resources>

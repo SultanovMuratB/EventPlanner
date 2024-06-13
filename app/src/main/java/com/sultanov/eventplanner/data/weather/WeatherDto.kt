@@ -9,6 +9,8 @@ internal data class WeatherDto(
     val meta: List<Meta>,
     @SerializedName("main")
     val temperatureHolder: TemperatureHolder,
+    @SerializedName("wind")
+    val wind: Wind,
     @SerializedName("dt")
     val timestamp: Long,
 ) {
@@ -21,5 +23,14 @@ internal data class WeatherDto(
     data class TemperatureHolder(
         @SerializedName("temp")
         val temperature: String,
+        @SerializedName("temp_min")
+        val minTemperature: String,
+        @SerializedName("temp_max")
+        val maxTemperature: String,
+    )
+
+    data class Wind(
+        @SerializedName("speed")
+        val speed: String,
     )
 }

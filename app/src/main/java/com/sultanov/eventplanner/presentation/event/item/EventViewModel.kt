@@ -1,8 +1,10 @@
 package com.sultanov.eventplanner.presentation.event.item
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sultanov.eventplanner.domain.event.Event
 import com.sultanov.eventplanner.domain.event.interactors.AddEventInteractor
 import com.sultanov.eventplanner.domain.event.interactors.EditEventInteractor
@@ -10,6 +12,7 @@ import com.sultanov.eventplanner.domain.event.interactors.GetEventInteractor
 import com.sultanov.eventplanner.domain.weather.Weather
 import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractor
 import com.sultanov.eventplanner.presentation.Mode
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class EventViewModel @Inject constructor(
@@ -19,25 +22,70 @@ internal class EventViewModel @Inject constructor(
     private val getWeatherInteractor: GetWeatherInteractor,
 ) : ViewModel() {
 
-    private val _eventLD = MutableLiveData<Event>()
-    val eventLD: LiveData<Event> = _eventLD
+    private val _event = MutableLiveData<Event>()
+    val event: LiveData<Event>
+        get() = _event
 
     suspend fun getEventMode(mode: Mode) {
         when (mode) {
             Mode.Add -> return
             is Mode.Edit -> {
-                val item = mode.eventId
-                _eventLD.value = getEventInteractor.getEvent(item)
+                val eventId = mode.eventId
+                _event.value = getEventInteractor.getEvent(eventId)
             }
         }
     }
 
-    suspend fun addEventItem(event: Event) {
-        addEventInteractor.addEvent(event)
+    fun addEventItem(
+        inputName: String?,
+        inputDescription: String?,
+        inputAddress: String?,
+        inputCity: String?,
+        inputAction: Event.Action,
+        inputTimestamp: Long,
+    ) {
+        val name = parseString(inputName)
+        val description = parseString(inputDescription)
+        val address = parseString(inputAddress)
+        val city = parseString(inputCity)
+        viewModelScope.launch {
+            val item = Event(
+                name = name,
+                description = description,
+                address = address,
+                city = city,
+                action = inputAction,
+                timestamp = inputTimestamp,
+                )
+            addEventInteractor.addEvent(item)
+        }
     }
 
-    suspend fun editEventItem(event: Event) {
-        editEventInteractor.editEvent(event)
+    fun editEventItem(
+        inputName: String?,
+        inputDescription: String?,
+        inputAddress: String?,
+        inputCity: String?,
+        inputAction: Event.Action,
+        inputTimestamp: Long,
+    ) {
+        val name = parseString(inputName)
+        val description = parseString(inputDescription)
+        val address = parseString(inputAddress)
+        val city = parseString(inputCity)
+        _event.value?.let {
+            viewModelScope.launch {
+                val item = it.copy(
+                    name = name,
+                    description = description,
+                    address = address,
+                    city = city,
+                    action = inputAction,
+                    timestamp = inputTimestamp,
+                )
+                editEventInteractor.editEvent(item)
+            }
+        }
     }
 
     suspend fun getWeather(city: String) : Weather? {
@@ -45,5 +93,9 @@ internal class EventViewModel @Inject constructor(
             // todo: обработать исключение? что на него делаем? cause
             null
         }
+    }
+
+    private fun parseString(str: String?) : String {
+        return str?.trim() ?: ""
     }
 }

@@ -81,7 +81,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/baseline_cloudy_snowing_24"
+            android:src="@drawable/weather_app"
             app:layout_constraintBottom_toTopOf="@+id/til_event_address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/til_city_event"

@@ -2,28 +2,12 @@ package com.sultanov.eventplanner.data.event.db
 
 import com.sultanov.eventplanner.domain.event.Event
 
-// todo: передалать в нормальный маппер!!!
+internal interface EventsMapper {
 
-internal fun EventEntity.toItem() : Event = Event(
-    id = id,
-    name = name,
-    address = address,
-    city = city,
-    description = description,
-    timestamp = date,
-    action = action,
-)
+    fun mapToItem(eventEntity: EventEntity) : Event
 
-internal fun List<EventEntity>.toListItem() : List<Event> = map {
-    it.toItem()
+    fun mapToEntity(event: Event) : EventEntity
+
+    fun mapToList(listEntity: List<EventEntity>) : List<Event>
 }
 
-internal fun Event.toDbModel() : EventEntity = EventEntity(
-    id = id,
-    name = name,
-    description = description,
-    city = city,
-    date = timestamp,
-    action = action,
-    address = address,
-)

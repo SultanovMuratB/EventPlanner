@@ -20,7 +20,6 @@ import com.sultanov.eventplanner.presentation.Mode
 import com.sultanov.eventplanner.presentation.ViewModelFactory
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
 
 internal class EventItemFragment : Fragment() {
@@ -61,6 +60,7 @@ internal class EventItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             launchMode()
+            getWeatherIcon()
         }
     }
 
@@ -78,34 +78,30 @@ internal class EventItemFragment : Fragment() {
 
     private fun launchAddMode() {
         binding.saveButton.setOnClickListener {
-           lifecycleScope.launch {
-                viewModel.addEventItem(
-                    Event(
-                        name = binding.etName.text.toString(),
-                        address = binding.etEventAddress.text.toString(),
-                        city = binding.etCityEvent.text.toString(),
-                        description = binding.etDescription.text.toString(),
-                        timestamp = binding.dateEvent.toLong(),
-                        action = getEventState(),
-                    )
-                )
-               findNavController().popBackStack()
-            }
+            viewModel.addEventItem(
+                inputName = binding.etName.text?.toString(),
+                inputAddress = binding.etEventAddress.text?.toString(),
+                inputCity = binding.etCityEvent.text?.toString(),
+                inputDescription = binding.etDescription.text?.toString(),
+                inputAction = getEventState(),
+                inputTimestamp = binding.dateEvent.toLong(),
+            )
+            findNavController().popBackStack()
         }
     }
 
     private suspend fun launchEditMode() {
         viewModel.getEventMode(args.mode)
-        viewModel.eventLD.observe(viewLifecycleOwner) {
+        viewModel.event.observe(viewLifecycleOwner) {
             with(binding) {
                 etName.setText(it.name)
                 etCityEvent.setText(it.city)
                 etDescription.setText(it.description)
                 etEventAddress.setText(it.address)
                 when (it.action) {
-                    Event.Action.VISITED -> eventVisited.isEnabled
-                    Event.Action.MISS -> eventMiss.isEnabled
-                    Event.Action.AWAIT -> eventAwait.isEnabled
+                    Event.Action.VISITED -> eventVisited.toggle()
+                    Event.Action.MISS -> eventMiss.toggle()
+                    Event.Action.AWAIT -> eventAwait.toggle()
                 }
                 val date = it.timestamp.toCalendar()
                 dateEvent.updateDate(
@@ -118,14 +114,12 @@ internal class EventItemFragment : Fragment() {
         binding.saveButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.editEventItem(
-                    Event(
-                        name = binding.etName.text.toString(),
-                        address = binding.etEventAddress.text.toString(),
-                        city = binding.etCityEvent.text.toString(),
-                        description = binding.etDescription.text.toString(),
-                        timestamp = binding.dateEvent.toLong(),
-                        action = getEventState(),
-                    )
+                    inputName = binding.etName.text.toString(),
+                    inputAddress = binding.etEventAddress.text.toString(),
+                    inputCity = binding.etCityEvent.text.toString(),
+                    inputDescription = binding.etDescription.text.toString(),
+                    inputAction = getEventState(),
+                    inputTimestamp = binding.dateEvent.toLong(),
                 )
                 findNavController().popBackStack()
             }
@@ -142,7 +136,7 @@ internal class EventItemFragment : Fragment() {
     }
 
     private suspend fun getWeatherIcon() {
-        val weatherCityItem: Weather? = viewModel.eventLD.value?.let { getWeatherIcon(it.city) }
+        val weatherCityItem: Weather? = viewModel.event.value?.let { getWeatherIcon(it.city) }
         val icon = weatherCityItem?.weatherIconUrl
         Picasso.get()
             .load(icon)
@@ -166,7 +160,7 @@ internal class EventItemFragment : Fragment() {
     }
 
     private fun Long.toCalendar() = Calendar.getInstance().apply {
-        time = Date(this@toCalendar * 1000)
+        timeInMillis = this@toCalendar
     }
 
     private suspend fun getWeatherIcon(city: String): Weather? {

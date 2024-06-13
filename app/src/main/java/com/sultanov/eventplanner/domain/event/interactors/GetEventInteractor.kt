@@ -4,5 +4,5 @@ import com.sultanov.eventplanner.domain.event.Event
 
 internal interface GetEventInteractor {
 
-    suspend fun getEvent(eventId: Int): Event
+    suspend fun getEvent(eventId: Long): Event
 }

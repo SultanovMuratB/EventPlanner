@@ -8,7 +8,7 @@ internal class GetEventInteractorImpl @Inject constructor(
     private val eventsRepository: EventsRepository,
 ) : GetEventInteractor {
 
-    override suspend fun getEvent(eventId: Int): Event {
+    override suspend fun getEvent(eventId: Long): Event {
         return eventsRepository.getEvent(eventId)
     }
 }

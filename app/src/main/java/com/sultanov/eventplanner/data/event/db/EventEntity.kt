@@ -7,7 +7,7 @@ import com.sultanov.eventplanner.domain.event.Event
 @Entity(tableName = "events_planner")
 internal data class EventEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    var id: Long,
     val name: String,
     val description: String,
     val address: String,

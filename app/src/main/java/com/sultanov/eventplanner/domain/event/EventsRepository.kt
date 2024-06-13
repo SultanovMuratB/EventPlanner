@@ -8,7 +8,7 @@ internal interface EventsRepository {
 
     suspend fun addEvent(event: Event)
 
-    suspend fun getEvent(eventId: Int): Event
+    suspend fun getEvent(eventId: Long): Event
 
     suspend fun editEvent(event: Event)
 

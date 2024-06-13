@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import com.sultanov.eventplanner.data.event.db.EventsDao
 import com.sultanov.eventplanner.data.event.db.EventsDatabase
+import com.sultanov.eventplanner.data.event.db.EventsMapper
+import com.sultanov.eventplanner.data.event.db.EventsMapperImpl
 import com.sultanov.eventplanner.data.event.db.EventsRepositoryImpl
 import com.sultanov.eventplanner.data.weather.WeatherMapper
 import com.sultanov.eventplanner.data.weather.WeatherMapperImpl
@@ -98,6 +100,10 @@ internal object ApplicationModule {
         @ApplicationScope
         @Binds
         fun bindWeatherMapper(impl: WeatherMapperImpl): WeatherMapper
+
+        @ApplicationScope
+        @Binds
+        fun bindEventsMapper(impl: EventsMapperImpl) : EventsMapper
 
         @ApplicationScope
         @Binds

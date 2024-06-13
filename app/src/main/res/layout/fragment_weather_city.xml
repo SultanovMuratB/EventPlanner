@@ -51,7 +51,7 @@
             tools:text="24 C" />
 
         <TextView
-            android:id="@+id/temp_forecast_days"
+            android:id="@+id/temp_min_max"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -60,10 +60,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_temp"
-            tools:text="Температура на 3 дня" />
+            android:text="@string/min_max_temperature" />
 
         <TextView
-            android:id="@+id/temp_one_day"
+            android:id="@+id/temp_min"
             style="@style/QuestionTextStyle"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -72,28 +72,13 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/temp_two_day"
+            app:layout_constraintEnd_toStartOf="@+id/temp_max"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/temp_forecast_days"
+            app:layout_constraintTop_toBottomOf="@+id/temp_min_max"
             tools:text="24 C" />
 
         <TextView
-            android:id="@+id/temp_two_day"
-            style="@style/QuestionTextStyle"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/shape_rectangle"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/temp_three_day"
-            app:layout_constraintStart_toEndOf="@+id/temp_one_day"
-            app:layout_constraintTop_toBottomOf="@+id/temp_forecast_days"
-            tools:text="24 C" />
-
-        <TextView
-            android:id="@+id/temp_three_day"
+            android:id="@+id/temp_max"
             style="@style/QuestionTextStyle"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -103,9 +88,40 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/temp_two_day"
-            app:layout_constraintTop_toBottomOf="@+id/temp_forecast_days"
+            app:layout_constraintStart_toEndOf="@+id/temp_min"
+            app:layout_constraintTop_toBottomOf="@+id/temp_min_max"
             tools:text="24 C" />
+
+        <TextView
+            android:id="@+id/text_wind_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/temp_min"
+            android:text="@string/wind_speed"
+            />
+
+        <TextView
+            android:id="@+id/wind_speed"
+            style="@style/QuestionTextStyle"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/shape_rectangle"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_wind_speed"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text = "15"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

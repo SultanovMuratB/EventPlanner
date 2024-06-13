@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class Event(
-    val id: Int = UNDEFINED_ID,
+    val id: Long = UNDEFINED_ID,
     val name: String,
     val description: String,
     val address: String,
@@ -26,6 +26,6 @@ internal data class Event(
 
     private companion object {
 
-        const val UNDEFINED_ID = -1
+        const val UNDEFINED_ID: Long = 0
     }
 }
