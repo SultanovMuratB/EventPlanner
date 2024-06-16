@@ -1,101 +1,69 @@
 package com.sultanov.eventplanner.presentation.event.item
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.sultanov.eventplanner.asEventsApplication
 import com.sultanov.eventplanner.domain.event.Event
-import com.sultanov.eventplanner.domain.event.interactors.AddEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.EditEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.GetEventInteractor
-import com.sultanov.eventplanner.domain.weather.Weather
-import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractor
+import com.sultanov.eventplanner.domain.event.EventsInteractor
+import com.sultanov.eventplanner.getApplicationComponent
 import com.sultanov.eventplanner.presentation.Mode
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-internal class EventViewModel @Inject constructor(
-    private val addEventInteractor: AddEventInteractor,
-    private val getEventInteractor: GetEventInteractor,
-    private val editEventInteractor: EditEventInteractor,
-    private val getWeatherInteractor: GetWeatherInteractor,
+internal class EventViewModel(
+    private val eventsInteractor: EventsInteractor,
+    private val eventMode: Mode,
 ) : ViewModel() {
 
-    private val _event = MutableLiveData<Event>()
-    val event: LiveData<Event>
-        get() = _event
+    private val mutableEventFlow = MutableStateFlow<Event?>(value = null)
+    val eventFlow: StateFlow<Event?> = mutableEventFlow
 
-    suspend fun getEventMode(mode: Mode) {
-        when (mode) {
-            Mode.Add -> return
-            is Mode.Edit -> {
-                val eventId = mode.eventId
-                _event.value = getEventInteractor.getEvent(eventId)
+    private var eventId = 0L
+
+    init {
+        if (eventMode is Mode.Edit) {
+            eventMode.eventId.let { id ->
+                viewModelScope.launch {
+                    val event = eventsInteractor.getEvent(id)
+                    eventId = event.id
+                    mutableEventFlow.value = event
+                }
             }
         }
     }
 
-    fun addEventItem(
-        inputName: String?,
-        inputDescription: String?,
-        inputAddress: String?,
-        inputCity: String?,
-        inputAction: Event.Action,
-        inputTimestamp: Long,
-    ) {
-        val name = parseString(inputName)
-        val description = parseString(inputDescription)
-        val address = parseString(inputAddress)
-        val city = parseString(inputCity)
+    fun saveEvent(event: Event) {
         viewModelScope.launch {
-            val item = Event(
-                name = name,
-                description = description,
-                address = address,
-                city = city,
-                action = inputAction,
-                timestamp = inputTimestamp,
-                )
-            addEventInteractor.addEvent(item)
-        }
-    }
-
-    fun editEventItem(
-        inputName: String?,
-        inputDescription: String?,
-        inputAddress: String?,
-        inputCity: String?,
-        inputAction: Event.Action,
-        inputTimestamp: Long,
-    ) {
-        val name = parseString(inputName)
-        val description = parseString(inputDescription)
-        val address = parseString(inputAddress)
-        val city = parseString(inputCity)
-        _event.value?.let {
-            viewModelScope.launch {
-                val item = it.copy(
-                    name = name,
-                    description = description,
-                    address = address,
-                    city = city,
-                    action = inputAction,
-                    timestamp = inputTimestamp,
-                )
-                editEventInteractor.editEvent(item)
+            when (eventMode) {
+                Mode.Add -> eventsInteractor.addEvent(event)
+                is Mode.Edit -> {
+                    val e = event.copy(
+                        id = eventId,
+                    )
+                    eventsInteractor.editEvent(e)
+                }
             }
         }
     }
 
-    suspend fun getWeather(city: String) : Weather? {
-        return getWeatherInteractor.getWeather(city).getOrElse { cause ->
-            // todo: обработать исключение? что на него делаем? cause
-            null
-        }
-    }
+    companion object {
 
-    private fun parseString(str: String?) : String {
-        return str?.trim() ?: ""
+        fun Factory(eventMode: Mode) = viewModelFactory {
+            initializer {
+                val application = get(ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY)
+                val eventsApplication = requireNotNull(application).asEventsApplication()
+                val applicationComponent = eventsApplication.getApplicationComponent()
+
+                EventViewModel(
+                    eventsInteractor = applicationComponent.eventsInteractor,
+                    eventMode = eventMode
+                )
+            }
+            build()
+        }
     }
 }

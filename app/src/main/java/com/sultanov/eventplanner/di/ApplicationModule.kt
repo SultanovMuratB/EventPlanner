@@ -1,7 +1,7 @@
 package com.sultanov.eventplanner.di
 
 import android.app.Application
-import androidx.lifecycle.ViewModel
+import com.sultanov.eventplanner.EventsApplication
 import com.sultanov.eventplanner.data.event.db.EventsDao
 import com.sultanov.eventplanner.data.event.db.EventsDatabase
 import com.sultanov.eventplanner.data.event.db.EventsMapper
@@ -13,26 +13,16 @@ import com.sultanov.eventplanner.data.weather.WeatherRepositoryImpl
 import com.sultanov.eventplanner.data.weather.api.ServiceApi
 import com.sultanov.eventplanner.data.weather.api.ServiceApiFactory
 import com.sultanov.eventplanner.data.weather.api.ServiceApiFactoryImpl
+import com.sultanov.eventplanner.domain.event.EventsInteractor
+import com.sultanov.eventplanner.domain.event.EventsInteractorImpl
 import com.sultanov.eventplanner.domain.event.EventsRepository
-import com.sultanov.eventplanner.domain.event.interactors.AddEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.AddEventInteractorImpl
-import com.sultanov.eventplanner.domain.event.interactors.EditEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.EditEventInteractorImpl
-import com.sultanov.eventplanner.domain.event.interactors.GetEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.GetEventInteractorImpl
-import com.sultanov.eventplanner.domain.event.interactors.GetEventsFlowInteractor
-import com.sultanov.eventplanner.domain.event.interactors.GetEventsFlowInteractorImpl
-import com.sultanov.eventplanner.domain.event.interactors.RemoveEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.RemoveEventInteractorImpl
 import com.sultanov.eventplanner.domain.weather.WeatherRepository
 import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractor
 import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractorImpl
-import com.sultanov.eventplanner.presentation.event.item.EventViewModel
-import com.sultanov.eventplanner.presentation.event.list.EventsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 @Module(
     includes = [
@@ -41,80 +31,52 @@ import dagger.multibindings.IntoMap
 )
 internal object ApplicationModule {
 
-    @ApplicationScope
     @Provides
-    fun provideServiceApi(
-        serviceApiFactory: ServiceApiFactory,
-    ): ServiceApi {
-        return serviceApiFactory.create()
+    @Singleton
+    fun eventsDao(application: Application): EventsDao {
+        return EventsDatabase.getInstance(application).eventsDao()
     }
 
-    @ApplicationScope
     @Provides
-    fun provideEventsDao(
-        application: Application
-    ): EventsDao {
-        return EventsDatabase.getInstance(application).eventsDao()
+    @Singleton
+    fun serviceApi(serviceApiFactory: ServiceApiFactory): ServiceApi {
+        return serviceApiFactory.create()
     }
 
     @Suppress("unused")
     @Module
     interface BindsModule {
 
-        @ApplicationScope
         @Binds
-        fun bindServiceApiFactory(impl: ServiceApiFactoryImpl): ServiceApiFactory
+        @Singleton
+        fun application(impl: EventsApplication): Application
 
-        @ApplicationScope
         @Binds
-        fun bindEventsRepository(impl: EventsRepositoryImpl): EventsRepository
+        @Singleton
+        fun serviceApiFactory(impl: ServiceApiFactoryImpl): ServiceApiFactory
 
-        @ApplicationScope
         @Binds
-        fun bindWeatherRepository(impl: WeatherRepositoryImpl): WeatherRepository
+        @Singleton
+        fun eventsRepository(impl: EventsRepositoryImpl): EventsRepository
 
-        @ApplicationScope
         @Binds
-        fun bindAddEventInteractor(impl: AddEventInteractorImpl): AddEventInteractor
+        @Singleton
+        fun weatherRepository(impl: WeatherRepositoryImpl): WeatherRepository
 
-        @ApplicationScope
         @Binds
-        fun bindGetEventInteractor(impl: GetEventInteractorImpl): GetEventInteractor
+        @Singleton
+        fun eventsInteractor(impl: EventsInteractorImpl): EventsInteractor
 
-        @ApplicationScope
         @Binds
-        fun bindEditEventInteractor(impl: EditEventInteractorImpl): EditEventInteractor
+        @Singleton
+        fun getWeatherInteractor(impl: GetWeatherInteractorImpl): GetWeatherInteractor
 
-        @ApplicationScope
         @Binds
-        fun bindRemoveEventInteractor(impl: RemoveEventInteractorImpl): RemoveEventInteractor
+        @Singleton
+        fun weatherMapper(impl: WeatherMapperImpl): WeatherMapper
 
-        @ApplicationScope
         @Binds
-        fun bindGetEventsFlowInteractor(impl: GetEventsFlowInteractorImpl): GetEventsFlowInteractor
-
-        @ApplicationScope
-        @Binds
-        fun bindGetWeatherInteractor(impl: GetWeatherInteractorImpl): GetWeatherInteractor
-
-        @ApplicationScope
-        @Binds
-        fun bindWeatherMapper(impl: WeatherMapperImpl): WeatherMapper
-
-        @ApplicationScope
-        @Binds
-        fun bindEventsMapper(impl: EventsMapperImpl) : EventsMapper
-
-        @ApplicationScope
-        @Binds
-        @IntoMap
-        @ViewModelKey(EventsViewModel::class)
-        fun bindEventsViewModel(vm: EventsViewModel): ViewModel
-
-        @ApplicationScope
-        @Binds
-        @IntoMap
-        @ViewModelKey(EventViewModel::class)
-        fun bindEventViewModel(vm: EventViewModel): ViewModel
+        @Singleton
+        fun eventMapper(impl: EventsMapperImpl) : EventsMapper
     }
 }

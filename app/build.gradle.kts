@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("androidx.navigation.safeargs")
+    id("androidx.navigation.safeargs")
     alias(libs.plugins.parcelize)
     alias(libs.plugins.ksp)
     id("kotlin-kapt")
@@ -38,32 +38,35 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        dataBinding = true
+    viewBinding {
+        enable = true
     }
 }
 
 dependencies {
 
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation(libs.room.core)
     ksp(libs.room.compiler)
 
     implementation(libs.picasso)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation ("com.google.dagger:dagger:2.51.1")
-    ksp("com.google.dagger:dagger-compiler:2.51.1")
+    implementation(libs.dagger)
+    implementation(libs.dagger.android)
+    implementation(libs.dagger.android.support)
+    ksp(libs.dagger.compiler)
+    ksp(libs.dagger.android.processor)
+
 
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.gsonConverter)
 
     implementation(libs.navigation.fragment)
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-//    implementation(libs.androidx.navigation.safe.args.gradle.plugin)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

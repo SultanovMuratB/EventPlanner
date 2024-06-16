@@ -1,50 +1,62 @@
 package com.sultanov.eventplanner.presentation.event.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.sultanov.eventplanner.asEventsApplication
 import com.sultanov.eventplanner.domain.event.Event
-import com.sultanov.eventplanner.domain.event.interactors.EditEventInteractor
-import com.sultanov.eventplanner.domain.event.interactors.GetEventsFlowInteractor
-import com.sultanov.eventplanner.domain.event.interactors.RemoveEventInteractor
+import com.sultanov.eventplanner.domain.event.EventsInteractor
+import com.sultanov.eventplanner.getApplicationComponent
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-internal class EventsViewModel @Inject constructor(
-    private val removeEventInteractor: RemoveEventInteractor,
-    private val editEventInteractor: EditEventInteractor,
-    private val getEventsFlowInteractor: GetEventsFlowInteractor,
+internal class EventsViewModel(
+    private val eventsInteractor: EventsInteractor,
 ) : ViewModel() {
 
-    private val _eventList = MutableLiveData<List<Event>>()
-    val eventList: LiveData<List<Event>> = _eventList
+    val eventsFlow: StateFlow<List<Event>> = eventsInteractor.getEvents().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = listOf(),
+    )
 
-    init {
-        loadData()
-    }
-
-    private fun loadData() {
+    fun changeEventState(event: Event) {
         viewModelScope.launch {
-            getEventsFlowInteractor.getEvents()
-                .collect {
-                    _eventList.value = it
-                }
+            val action = when (event.action) {
+                Event.Action.AWAIT -> Event.Action.MISS
+                Event.Action.MISS -> Event.Action.VISITED
+                Event.Action.VISITED -> Event.Action.AWAIT
+            }
+
+            val newEvent = event.copy(action = action)
+            eventsInteractor.editEvent(newEvent)
         }
     }
 
-    suspend fun changeEventState(event: Event) {
-        val action = when (event.action) {
-            Event.Action.AWAIT -> Event.Action.MISS
-            Event.Action.MISS -> Event.Action.VISITED
-            Event.Action.VISITED -> Event.Action.AWAIT
+    fun deleteEvent(event: Event) {
+        viewModelScope.launch {
+            eventsInteractor.removeEvent(event)
         }
-
-        val newEvent = event.copy(action = action)
-        editEventInteractor.editEvent(newEvent)
     }
 
-    suspend fun deleteEventItem(event: Event) {
-        removeEventInteractor.removeEvent(event)
+    companion object {
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = get(ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY)
+                val eventsApplication = requireNotNull(application).asEventsApplication()
+                val applicationComponent = eventsApplication.getApplicationComponent()
+
+                EventsViewModel(
+                    eventsInteractor = applicationComponent.eventsInteractor,
+                )
+            }
+
+            build()
+        }
     }
 }

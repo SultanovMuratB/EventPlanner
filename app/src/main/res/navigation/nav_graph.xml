@@ -20,7 +20,7 @@
         android:label="fragment_event_item"
         tools:layout="@layout/fragment_event_item" >
         <argument
-            android:name="mode"
+            android:name="eventMode"
             app:argType="com.sultanov.eventplanner.presentation.Mode" />
         <action
             android:id="@+id/action_eventItemFragment_to_weatherCityFragment"
@@ -32,7 +32,7 @@
         android:label="fragment_weather_city"
         tools:layout="@layout/fragment_weather_city" >
         <argument
-            android:name="weatherCityItem"
-            app:argType="com.sultanov.eventplanner.domain.weather.Weather" />
+            android:name="city"
+            app:argType="string" />
     </fragment>
 </navigation>

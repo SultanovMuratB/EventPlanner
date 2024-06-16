@@ -1,29 +1,27 @@
 package com.sultanov.eventplanner.di
 
-import android.app.Application
-import com.sultanov.eventplanner.presentation.event.item.EventItemFragment
-import com.sultanov.eventplanner.presentation.event.list.EventsListFragment
-import dagger.BindsInstance
+import com.sultanov.eventplanner.EventsApplication
+import com.sultanov.eventplanner.domain.event.EventsInteractor
+import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractor
 import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import javax.inject.Singleton
 
-@ApplicationScope
+@Singleton
 @Component(
     modules = [
+        AndroidSupportInjectionModule::class,
         ApplicationModule::class,
     ],
 )
-internal interface ApplicationComponent {
+internal interface ApplicationComponent : AndroidInjector<EventsApplication> {
 
-    fun inject(fragment: EventsListFragment)
+    val eventsInteractor: EventsInteractor
 
-    fun inject(fragment: EventItemFragment)
+    val getWeatherInteractor: GetWeatherInteractor
 
     @Component.Factory
-    interface Factory {
-
-        fun create(
-            @BindsInstance application: Application
-        ): ApplicationComponent
-    }
+    interface Factory : AndroidInjector.Factory<EventsApplication>
 }
 
