@@ -8,9 +8,7 @@ internal class GetWeatherInteractorImpl @Inject constructor(
     private val weatherRepository: WeatherRepository,
 ) : GetWeatherInteractor {
 
-    override suspend fun getWeather(city: String): Result<Weather> {
-        return runCatching {
-            weatherRepository.getWeather(city)
-        }
+    override suspend fun getWeather(city: String): Weather {
+        return weatherRepository.getWeather(city)
     }
 }

@@ -4,5 +4,5 @@ import com.sultanov.eventplanner.domain.weather.Weather
 
 internal interface GetWeatherInteractor {
 
-    suspend fun getWeather(city: String): Result<Weather>
+    suspend fun getWeather(city: String): Weather
 }

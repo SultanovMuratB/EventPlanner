@@ -16,10 +16,22 @@
             android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/temp_current_day"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/weather_city_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Ростов-на-Дону" />
+
+        <ImageView
+            android:id="@+id/weather_city_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/temp_current_day"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/city_name"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/temp_current_day"
@@ -44,7 +56,7 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/temp_forecast_days"
+            app:layout_constraintBottom_toTopOf="@+id/temp_min_max"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/temp_current_day"

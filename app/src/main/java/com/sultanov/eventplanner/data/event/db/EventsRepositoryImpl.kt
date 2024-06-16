@@ -32,7 +32,7 @@ internal class EventsRepositoryImpl @Inject constructor(
 
     override suspend fun editEvent(event: Event) {
         val eventDb = eventsMapper.mapToEntity(event)
-        eventsDao.updateEvent(eventDb)
+        eventsDao.createEvent(eventDb)
     }
 
     override suspend fun removeEvent(event: Event) {

@@ -15,4 +15,6 @@
     <string name="temp_today">Температура на сегодня</string>
     <string name="min_max_temperature">Минимальная и максимальная температуры</string>
     <string name="wind_speed">Скорость ветра</string>
+    <string name="celsium">%s С</string>
+    <string name="fast_wind">%s м/с</string>
 </resources>

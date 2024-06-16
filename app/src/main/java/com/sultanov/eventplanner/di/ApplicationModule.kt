@@ -29,6 +29,7 @@ import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractor
 import com.sultanov.eventplanner.domain.weather.interactors.GetWeatherInteractorImpl
 import com.sultanov.eventplanner.presentation.event.item.EventViewModel
 import com.sultanov.eventplanner.presentation.event.list.EventsViewModel
+import com.sultanov.eventplanner.presentation.event.weather.WeatherViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -116,5 +117,11 @@ internal object ApplicationModule {
         @IntoMap
         @ViewModelKey(EventViewModel::class)
         fun bindEventViewModel(vm: EventViewModel): ViewModel
+
+        @ApplicationScope
+        @Binds
+        @IntoMap
+        @ViewModelKey(WeatherViewModel::class)
+        fun bindWeatherViewModel(vm: WeatherViewModel): ViewModel
     }
 }

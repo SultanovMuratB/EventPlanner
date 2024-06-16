@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 internal class WeatherMapperImpl @Inject constructor() : WeatherMapper {
 
-    @Throws(NoSuchElementException::class)
     override fun map(weatherDto: WeatherDto): Weather {
         return with(weatherDto) {
             val meta = weatherDto.meta.first()
