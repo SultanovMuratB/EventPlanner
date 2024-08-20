@@ -1,67 +1,60 @@
 package com.sultanov.eventplanner.presentation.event.item
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.sultanov.eventplanner.R
+import com.sultanov.eventplanner.presentation.core.AbstractFragment
 import com.sultanov.eventplanner.databinding.FragmentEventItemBinding
 import com.sultanov.eventplanner.domain.event.Event
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-internal class EventItemFragment : Fragment() {
+internal class EventItemFragment :
+    AbstractFragment<FragmentEventItemBinding>(R.layout.fragment_event_item) {
 
     private val args by navArgs<EventItemFragmentArgs>()
-
-    private var _binding: FragmentEventItemBinding? = null
-    private val binding: FragmentEventItemBinding
-        get() = _binding ?: throw RuntimeException("FragmentEventItemBinding == null")
 
     private val viewModel: EventViewModel by viewModels {
         EventViewModel.Factory(args.eventMode)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentEventItemBinding.inflate(inflater)
-        return binding.root
-    }
+    override fun bind(view: View) = FragmentEventItemBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            viewModel.eventFlow.filterNotNull().collect { event ->
-                with(binding) {
-                    etName.setText(event.name)
-                    etCityEvent.setText(event.city)
-                    val city = binding.etCityEvent.text.toString()
-                    navigateToWeather(city)
-                    etDescription.setText(event.description)
-                    etEventAddress.setText(event.address)
-                    when (event.action) {
-                        Event.Action.VISITED -> eventVisited.toggle()
-                        Event.Action.MISS -> eventMiss.toggle()
-                        Event.Action.AWAIT -> eventAwait.toggle()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.eventFlow
+                .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+                .filterNotNull().collect { event ->
+                    with(binding) {
+                        etName.setText(event.name)
+                        etCityEvent.setText(event.city)
+                        val city = etCityEvent.text.toString()
+                        navigateToWeather(city)
+                        etDescription.setText(event.description)
+                        etEventAddress.setText(event.address)
+                        when (event.action) {
+                            Event.Action.VISITED -> eventVisited.toggle()
+                            Event.Action.MISS -> eventMiss.toggle()
+                            Event.Action.AWAIT -> eventAwait.toggle()
+                        }
+                        val date = event.timestamp.toCalendar()
+                        dateEvent.updateDate(
+                            date.get(Calendar.YEAR),
+                            date.get(Calendar.MONTH + 1),
+                            date.get(Calendar.DAY_OF_WEEK),
+                        )
                     }
-                    val date = event.timestamp.toCalendar()
-                    dateEvent.updateDate(
-                        date.get(Calendar.YEAR),
-                        date.get(Calendar.MONTH + 1),
-                        date.get(Calendar.DAY_OF_WEEK),
-                    )
                 }
-            }
         }
 
         with(binding) {
@@ -79,11 +72,6 @@ internal class EventItemFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getEventState(): Event.Action {

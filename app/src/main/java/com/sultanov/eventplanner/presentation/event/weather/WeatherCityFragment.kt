@@ -1,50 +1,40 @@
 package com.sultanov.eventplanner.presentation.event.weather
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import com.sultanov.eventplanner.R
 import com.sultanov.eventplanner.databinding.FragmentWeatherCityBinding
 import com.sultanov.eventplanner.domain.weather.Weather
+import com.sultanov.eventplanner.presentation.core.AbstractFragment
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-internal class WeatherCityFragment : Fragment() {
+internal class WeatherCityFragment :
+    AbstractFragment<FragmentWeatherCityBinding>(R.layout.fragment_weather_city) {
 
     private val args by navArgs<WeatherCityFragmentArgs>()
-
-    private var _binding: FragmentWeatherCityBinding? = null
-    private val binding: FragmentWeatherCityBinding
-        get() = _binding ?: throw RuntimeException("FragmentWeatherCityBinding == null")
 
     private val viewModel: WeatherViewModel by viewModels {
         WeatherViewModel.Factory(args.city)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentWeatherCityBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun bind(view: View) = FragmentWeatherCityBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.weather.filterNotNull().collect { weather ->
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.weather
+                .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+                .filterNotNull().collect { weather ->
                     changeTextViews(weather)
                 }
-            }
         }
     }
 

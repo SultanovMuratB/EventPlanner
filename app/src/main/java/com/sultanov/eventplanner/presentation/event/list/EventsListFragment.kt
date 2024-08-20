@@ -1,38 +1,29 @@
 package com.sultanov.eventplanner.presentation.event.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.sultanov.eventplanner.R
 import com.sultanov.eventplanner.databinding.FragmentEventsListBinding
 import com.sultanov.eventplanner.presentation.Mode
+import com.sultanov.eventplanner.presentation.core.AbstractFragment
 import kotlinx.coroutines.launch
 
-internal class EventsListFragment : Fragment() {
-
-    private var _binding: FragmentEventsListBinding? = null
-    private val binding: FragmentEventsListBinding
-        get() = _binding ?: throw RuntimeException("FragmentEventsListBinding == null")
+internal class EventsListFragment :
+    AbstractFragment<FragmentEventsListBinding>(R.layout.fragment_events_list) {
 
     private lateinit var eventListAdapter: EventListAdapter
 
     private val viewModel by viewModels<EventsViewModel> { EventsViewModel.Factory }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentEventsListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun bind(view: View) = FragmentEventsListBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,11 +33,6 @@ internal class EventsListFragment : Fragment() {
                 EventsListFragmentDirections.actionEventsListFragmentToEventItemFragment(Mode.Add)
             )
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupRecyclerView() {
@@ -67,9 +53,11 @@ internal class EventsListFragment : Fragment() {
             )
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.eventsFlow.collect { events ->
-                eventListAdapter.submitList(events)
-            }
+            viewModel.eventsFlow
+                .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+                .collect { events ->
+                    eventListAdapter.submitList(events)
+                }
         }
         eventListAdapter.onEventIconClickListener = {
             viewModel.viewModelScope.launch {
@@ -101,7 +89,7 @@ internal class EventsListFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = eventListAdapter.currentList[viewHolder.adapterPosition]
 
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.deleteEvent(item)
                 }
             }
